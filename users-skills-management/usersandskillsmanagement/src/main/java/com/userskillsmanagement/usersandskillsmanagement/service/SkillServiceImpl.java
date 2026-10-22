@@ -32,4 +32,11 @@ public class SkillServiceImpl implements SkillService {
         return skillRepository.findBySkillNameContainingIgnoreCase(skillName, pageable)
                 .map(skill -> new SkillDTO(skill.getId(), skill.getSkillName(), skill.getSkillField()));
     }
+
+    @Override
+    @Cacheable(value = "skill", key = "#id")
+    public SkillDTO getSkillById(Long id) {
+        Skill skill = skillRepository.findById(id).orElseThrow(() -> new RuntimeException("Skill not found"));
+        return new SkillDTO(skill.getId(), skill.getSkillName(), skill.getSkillField());
+    }
 }

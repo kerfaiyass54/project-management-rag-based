@@ -7,6 +7,14 @@ import java.util.List;
 
 public interface EngineerService {
     EngineerDTO addNewEngineer(EngineerDTO engineerDTO);
+
     List<EngineerDTO> getAllEngineers();
+
+    EngineerDTO getEngineerById(Long id);
+
     EngineerSkillDTO assignSkillToEngineer(EngineerSkillDTO engineerSkillDTO);
+
+    EngineerDTO updateEngineer(Long id, EngineerDTO engineerDTO);
+
+    EngineerSkillDTO updateEngineerSkill(Long id, EngineerSkillDTO engineerSkillDTO);
 }

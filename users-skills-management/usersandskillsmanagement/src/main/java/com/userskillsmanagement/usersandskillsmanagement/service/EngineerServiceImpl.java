@@ -46,6 +46,13 @@ public class EngineerServiceImpl implements EngineerService {
     }
 
     @Override
+    @Cacheable(value = "engineer", key = "#id")
+    public EngineerDTO getEngineerById(Long id) {
+        Engineer engineer = engineerRepository.findById(id).orElseThrow(() -> new RuntimeException("Engineer not found"));
+        return new EngineerDTO(engineer.getId(), engineer.getEngineerName(), engineer.getEngineerSpeciality(), engineer.getEngineerExperience(), engineer.getEngineerPosition(), engineer.getTeamId());
+    }
+
+    @Override
     public EngineerSkillDTO assignSkillToEngineer(EngineerSkillDTO engineerSkillDTO) {
         Engineer engineer = engineerRepository.findById(engineerSkillDTO.engineerId()).orElseThrow(() -> new RuntimeException("Engineer not found"));
         Skill skill = skillRepository.findById(engineerSkillDTO.skillId()).orElseThrow(() -> new RuntimeException("Skill not found"));
@@ -56,5 +63,24 @@ public class EngineerServiceImpl implements EngineerService {
         engineerSkill.setProficiencyLevel(engineerSkillDTO.proficiencyLevel());
         EngineerSkill savedEngineerSkill = engineerSkillRepository.save(engineerSkill);
         return new EngineerSkillDTO(savedEngineerSkill.getId(), savedEngineerSkill.getEngineer().getId(), savedEngineerSkill.getSkill().getId(), savedEngineerSkill.getProficiencyLevel());
+    }
+
+    @Override
+    @CacheEvict(value = {"engineers", "engineer"}, allEntries = true)
+    public EngineerDTO updateEngineer(Long id, EngineerDTO engineerDTO) {
+        Engineer engineer = engineerRepository.findById(id).orElseThrow(() -> new RuntimeException("Engineer not found"));
+        engineer.setEngineerSpeciality(engineerDTO.engineerSpeciality());
+        engineer.setEngineerExperience(engineerDTO.engineerExperience());
+        engineer.setEngineerPosition(engineerDTO.engineerPosition());
+        Engineer updatedEngineer = engineerRepository.save(engineer);
+        return new EngineerDTO(updatedEngineer.getId(), updatedEngineer.getEngineerName(), updatedEngineer.getEngineerSpeciality(), updatedEngineer.getEngineerExperience(), updatedEngineer.getEngineerPosition(), updatedEngineer.getTeamId());
+    }
+
+    @Override
+    public EngineerSkillDTO updateEngineerSkill(Long id, EngineerSkillDTO engineerSkillDTO) {
+        EngineerSkill engineerSkill = engineerSkillRepository.findById(id).orElseThrow(() -> new RuntimeException("EngineerSkill not found"));
+        engineerSkill.setProficiencyLevel(engineerSkillDTO.proficiencyLevel());
+        EngineerSkill updatedEngineerSkill = engineerSkillRepository.save(engineerSkill);
+        return new EngineerSkillDTO(updatedEngineerSkill.getId(), updatedEngineerSkill.getEngineer().getId(), updatedEngineerSkill.getSkill().getId(), updatedEngineerSkill.getProficiencyLevel());
     }
 }

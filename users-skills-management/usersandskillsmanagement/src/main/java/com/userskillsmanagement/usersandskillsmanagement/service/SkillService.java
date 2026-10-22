@@ -6,5 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface SkillService {
     SkillDTO addNewSkill(SkillDTO skillDTO);
+
     Page<SkillDTO> searchSkills(String skillName, Pageable pageable);
+
+    SkillDTO getSkillById(Long id);
 }

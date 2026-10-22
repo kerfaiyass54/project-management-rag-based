@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/engineers")
+@RequestMapping("/api/v1/engineers")
 @RequiredArgsConstructor
 public class EngineerController {
 
@@ -26,8 +26,23 @@ public class EngineerController {
         return ResponseEntity.ok(engineerService.getAllEngineers());
     }
 
-    @PostMapping("/assign-skill")
+    @GetMapping("/{id}")
+    public ResponseEntity<EngineerDTO> getEngineerById(@PathVariable Long id) {
+        return ResponseEntity.ok(engineerService.getEngineerById(id));
+    }
+
+    @PostMapping("/skills")
     public ResponseEntity<EngineerSkillDTO> assignSkillToEngineer(@RequestBody EngineerSkillDTO engineerSkillDTO) {
         return ResponseEntity.ok(engineerService.assignSkillToEngineer(engineerSkillDTO));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EngineerDTO> updateEngineer(@PathVariable Long id, @RequestBody EngineerDTO engineerDTO) {
+        return ResponseEntity.ok(engineerService.updateEngineer(id, engineerDTO));
+    }
+
+    @PutMapping("/skills/{id}")
+    public ResponseEntity<EngineerSkillDTO> updateEngineerSkill(@PathVariable Long id, @RequestBody EngineerSkillDTO engineerSkillDTO) {
+        return ResponseEntity.ok(engineerService.updateEngineerSkill(id, engineerSkillDTO));
     }
 }
