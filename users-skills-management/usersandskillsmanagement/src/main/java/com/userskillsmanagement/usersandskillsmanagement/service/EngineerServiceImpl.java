@@ -9,6 +9,8 @@ import com.userskillsmanagement.usersandskillsmanagement.repository.EngineerRepo
 import com.userskillsmanagement.usersandskillsmanagement.repository.EngineerSkillRepository;
 import com.userskillsmanagement.usersandskillsmanagement.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +25,7 @@ public class EngineerServiceImpl implements EngineerService {
     private final EngineerSkillRepository engineerSkillRepository;
 
     @Override
+    @CacheEvict(value = "engineers", allEntries = true)
     public EngineerDTO addNewEngineer(EngineerDTO engineerDTO) {
         Engineer engineer = new Engineer();
         engineer.setEngineerName(engineerDTO.engineerName());
@@ -35,6 +38,7 @@ public class EngineerServiceImpl implements EngineerService {
     }
 
     @Override
+    @Cacheable("engineers")
     public List<EngineerDTO> getAllEngineers() {
         return engineerRepository.findAll().stream()
                 .map(engineer -> new EngineerDTO(engineer.getId(), engineer.getEngineerName(), engineer.getEngineerSpeciality(), engineer.getEngineerExperience(), engineer.getEngineerPosition(), engineer.getTeamId()))
