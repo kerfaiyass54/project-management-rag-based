@@ -1,6 +1,5 @@
 package com.userskillsmanagement.usersandskillsmanagement.model.entity;
 
-import com.userskillsmanagement.usersandskillsmanagement.model.enums.SkillField;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +19,6 @@ public class Skill {
     @Column(nullable = false, unique = true)
     private String skillName;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SkillField skillField;
+    private String skillField;
 }

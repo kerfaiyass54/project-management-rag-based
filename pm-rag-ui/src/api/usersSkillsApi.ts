@@ -31,6 +31,18 @@ export interface PageResponse<T> {
   size: number;
 }
 
+export interface EngineerSkill {
+  id: number;
+  engineerId: number;
+  skillId: number;
+  proficiencyLevel: string;
+}
+
+export interface SkillUsage {
+  mostUsed?: Skill;
+  leastUsed?: Skill;
+}
+
 const API_URL = import.meta.env.VITE_USERS_SKILLS_API_URL ?? 'http://localhost:8350/api/v1';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -60,10 +72,21 @@ export const usersSkillsApi = {
     request<PageResponse<Engineer>>(`/engineers?${pageParams(page, size, search, sortBy, sortDirection)}`),
   createEngineer: (engineer: Omit<Engineer, 'id'>) =>
     request<Engineer>('/engineers', { method: 'POST', body: JSON.stringify(engineer) }),
+  getEngineer: (id: number) => request<Engineer>(`/engineers/${id}`),
+  updateEngineer: (id: number, engineer: Omit<Engineer, 'id'>) =>
+    request<Engineer>(`/engineers/${id}`, { method: 'PUT', body: JSON.stringify(engineer) }),
   deleteEngineer: (id: number) => request<void>(`/engineers/${id}`, { method: 'DELETE' }),
+  assignSkill: (assignment: Omit<EngineerSkill, 'id'>) =>
+    request<EngineerSkill>('/engineers/skills', { method: 'POST', body: JSON.stringify(assignment) }),
+  updateEngineerSkill: (id: number, assignment: Omit<EngineerSkill, 'id'>) =>
+    request<EngineerSkill>(`/engineers/skills/${id}`, { method: 'PUT', body: JSON.stringify(assignment) }),
+  getEngineerTotal: () => request<number>('/engineers/count'),
+  getEngineersByType: () => request<Record<string, number>>('/engineers/count-by-type'),
   getSkills: (page: number, size: number, search: string, sortBy: string, sortDirection: string) =>
     request<PageResponse<Skill>>(`/skills?${pageParams(page, size, search, sortBy, sortDirection)}`),
   createSkill: (skill: Omit<Skill, 'id'>) =>
     request<Skill>('/skills', { method: 'POST', body: JSON.stringify(skill) }),
+  getSkill: (id: number) => request<Skill>(`/skills/${id}`),
   deleteSkill: (id: number) => request<void>(`/skills/${id}`, { method: 'DELETE' }),
+  getSkillUsage: () => request<SkillUsage>('/skills/usage'),
 };

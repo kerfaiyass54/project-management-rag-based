@@ -10,7 +10,7 @@ import { Box } from '@mui/material';
 import AuthGuard from './components/AuthGuard';
 import Forbidden from './pages/errors/403';
 import NotFound from './pages/errors/404';
-import AdminHomePage from './pages/admin/AdminHomePage';
+import DashboardPage from './pages/admin/DashboardPage';
 import EngineersPage from './pages/admin/EngineersPage';
 import SkillsPage from './pages/admin/SkillsPage';
 import AddSkillPage from './pages/admin/AddSkillPage';
@@ -32,7 +32,7 @@ const AppRouter: React.FC = () => {
 
   if (isAdmin) {
     links = [
-      { label: 'Dashboard', href: '/admin', icon: DashboardRoundedIcon },
+      { label: 'Dashboard', href: '/admin/dashboard', icon: DashboardRoundedIcon },
       { label: 'Engineers', href: '/admin/engineers', icon: GroupsRoundedIcon },
       { label: 'Skills', href: '/admin/skills', icon: BuildRoundedIcon },
     ];
@@ -47,24 +47,25 @@ const AppRouter: React.FC = () => {
 
   return (
     <Router>
-      <Navbar links={links} logoHref={isAdmin ? '/admin' : '/'} />
+      <Navbar links={links} logoHref="/" />
       <main>
         <Box sx={{ pt: '84px' }}>
           <Routes>
-            <Route path="/" element={isAdmin ? <Navigate to="/admin" replace /> : <HomePage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/dev" element={<DevPage />} />
 
             {/* Admin Routes */}
             <Route
-              path="/admin"
+              path="/admin/dashboard"
               element={
                 <AuthGuard roles={['admin']}>
-                  <AdminHomePage />
+                  <DashboardPage />
                 </AuthGuard>
               }
             />
+            <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
             <Route
               path="/admin/engineers"
               element={

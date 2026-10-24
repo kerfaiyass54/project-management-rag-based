@@ -1,6 +1,5 @@
 package com.userskillsmanagement.usersandskillsmanagement.model.entity;
 
-import com.userskillsmanagement.usersandskillsmanagement.model.enums.EngineerExperience;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,9 +22,8 @@ public class Engineer {
     @Column(nullable = false)
     private String engineerSpeciality;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EngineerExperience engineerExperience;
+    private String engineerExperience;
 
     @Column(nullable = false)
     private String engineerPosition;
