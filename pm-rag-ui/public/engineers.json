@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "engineerName": "John Doe",
+    "engineerSpeciality": "Frontend",
+    "engineerExperience": "SENIOR",
+    "engineerPosition": "Software Engineer",
+    "teamId": 101
+  },
+  {
+    "id": 2,
+    "engineerName": "Jane Smith",
+    "engineerSpeciality": "Backend",
+    "engineerExperience": "JUNIOR",
+    "engineerPosition": "Software Engineer",
+    "teamId": 102
+  },
+  {
+    "id": 3,
+    "engineerName": "Peter Jones",
+    "engineerSpeciality": "Fullstack",
+    "engineerExperience": "MID",
+    "engineerPosition": "Senior Software Engineer",
+    "teamId": 101
+  },
+  {
+    "id": 4,
+    "engineerName": "Mary Williams",
+    "engineerSpeciality": "DevOps",
+    "engineerExperience": "SENIOR",
+    "engineerPosition": "DevOps Engineer",
+    "teamId": 103
+  },
+  {
+    "id": 5,
+    "engineerName": "David Brown",
+    "engineerSpeciality": "Frontend",
+    "engineerExperience": "JUNIOR",
+    "engineerPosition": "Software Engineer",
+    "teamId": 102
+  },
+  {
+    "id": 6,
+    "engineerName": "Susan Davis",
+    "engineerSpeciality": "Backend",
+    "engineerExperience": "MID",
+    "engineerPosition": "Software Engineer",
+    "teamId": 101
+  },
+  {
+    "id": 7,
+    "engineerName": "Michael Miller",
+    "engineerSpeciality": "Fullstack",
+    "engineerExperience": "SENIOR",
+    "engineerPosition": "Tech Lead",
+    "teamId": 103
+  },
+  {
+    "id": 8,
+    "engineerName": "Linda Wilson",
+    "engineerSpeciality": "DevOps",
+    "engineerExperience": "JUNIOR",
+    "engineerPosition": "DevOps Engineer",
+    "teamId": 102
+  },
+  {
+    "id": 9,
+    "engineerName": "Robert Moore",
+    "engineerSpeciality": "Frontend",
+    "engineerExperience": "MID",
+    "engineerPosition": "Senior Software Engineer",
+    "teamId": 101
+  },
+  {
+    "id": 10,
+    "engineerName": "Patricia Taylor",
+    "engineerSpeciality": "Backend",
+    "engineerExperience": "SENIOR",
+    "engineerPosition": "Software Engineer",
+    "teamId": 103
+  }
+]

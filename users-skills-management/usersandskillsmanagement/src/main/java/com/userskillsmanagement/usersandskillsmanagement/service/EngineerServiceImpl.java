@@ -11,9 +11,12 @@ import com.userskillsmanagement.usersandskillsmanagement.repository.SkillReposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,11 +41,9 @@ public class EngineerServiceImpl implements EngineerService {
     }
 
     @Override
-    @Cacheable("engineers")
-    public List<EngineerDTO> getAllEngineers() {
-        return engineerRepository.findAll().stream()
-                .map(engineer -> new EngineerDTO(engineer.getId(), engineer.getEngineerName(), engineer.getEngineerSpeciality(), engineer.getEngineerExperience(), engineer.getEngineerPosition(), engineer.getTeamId()))
-                .collect(Collectors.toList());
+    public Page<EngineerDTO> getAllEngineers(String search, Pageable pageable) {
+        return engineerRepository.findByEngineerNameContainingIgnoreCase(search == null ? "" : search, pageable)
+                .map(engineer -> new EngineerDTO(engineer.getId(), engineer.getEngineerName(), engineer.getEngineerSpeciality(), engineer.getEngineerExperience(), engineer.getEngineerPosition(), engineer.getTeamId()));
     }
 
     @Override
@@ -77,10 +78,30 @@ public class EngineerServiceImpl implements EngineerService {
     }
 
     @Override
+    @CacheEvict(value = {"engineers", "engineer"}, allEntries = true)
+    public void deleteEngineer(Long id) {
+        if (!engineerRepository.existsById(id)) {
+            throw new RuntimeException("Engineer not found");
+        }
+        engineerRepository.deleteById(id);
+    }
+
+    @Override
     public EngineerSkillDTO updateEngineerSkill(Long id, EngineerSkillDTO engineerSkillDTO) {
         EngineerSkill engineerSkill = engineerSkillRepository.findById(id).orElseThrow(() -> new RuntimeException("EngineerSkill not found"));
         engineerSkill.setProficiencyLevel(engineerSkillDTO.proficiencyLevel());
         EngineerSkill updatedEngineerSkill = engineerSkillRepository.save(engineerSkill);
         return new EngineerSkillDTO(updatedEngineerSkill.getId(), updatedEngineerSkill.getEngineer().getId(), updatedEngineerSkill.getSkill().getId(), updatedEngineerSkill.getProficiencyLevel());
+    }
+
+    @Override
+    public long getTotalUsers() {
+        return engineerRepository.count();
+    }
+
+    @Override
+    public Map<String, Long> countUsersByType() {
+        return engineerRepository.findAll().stream()
+                .collect(Collectors.groupingBy(Engineer::getEngineerPosition, Collectors.counting()));
     }
 }

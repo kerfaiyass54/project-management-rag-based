@@ -4,13 +4,21 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
-import ContactMailIcon from '@mui/icons-material/ContactMail';
-import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import MenuIcon from '@mui/icons-material/Menu';
+import type { SvgIconComponent } from '@mui/icons-material';
 
-const Navbar = ({ links }) => {
+export interface NavLink {
+  label: string;
+  href: string;
+  icon: SvgIconComponent;
+}
+
+interface NavbarProps {
+  links: NavLink[];
+  logoHref: string;
+}
+
+const Navbar = ({ links, logoHref }: NavbarProps) => {
   const [langAnchorEl, setLangAnchorEl] = useState(null);
   const [userAnchorEl, setUserAnchorEl] = useState(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
@@ -21,28 +29,14 @@ const Navbar = ({ links }) => {
   const buttonVariants = {
     hover: {
       scale: 1.05,
-      transition: { type: 'spring', stiffness: 300 },
+      transition: { type: 'spring' as const, stiffness: 300 },
     },
-  };
-
-  const getIcon = (path) => {
-    switch (path) {
-      case '/':
-        return <HomeIcon />;
-      case '/about':
-        return <InfoIcon />;
-      case '/contact':
-        return <ContactMailIcon />;
-      case '/dev':
-        return <DeveloperModeIcon />;
-      default:
-        return null;
-    }
   };
 
   const renderNavLinks = (isMobileMenu = false) => {
     const linkComponents = links.map((link) => {
       const isActive = location.pathname === link.href;
+      const Icon = link.icon;
       if (isMobileMenu) {
         return (
           <MenuItem
@@ -51,7 +45,9 @@ const Navbar = ({ links }) => {
             to={link.href}
             selected={isActive}
             onClick={() => setMobileMenuAnchorEl(null)}
+            sx={{ gap: 1.5 }}
           >
+            <Icon fontSize="small" />
             {link.label}
           </MenuItem>
         );
@@ -66,9 +62,10 @@ const Navbar = ({ links }) => {
             component={Link}
             to={link.href}
             sx={{
-              color: isActive ? 'blue' : 'black',
+              color: isActive ? 'primary.main' : 'text.primary',
+              fontWeight: isActive ? 700 : 500,
             }}
-            startIcon={getIcon(link.href)}
+            startIcon={<Icon />}
           >
             {link.label}
           </Button>
@@ -76,27 +73,7 @@ const Navbar = ({ links }) => {
       );
     });
 
-    if (isMobile) {
-      return (
-        <>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={(e) => setMobileMenuAnchorEl(e.currentTarget)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Menu
-            anchorEl={mobileMenuAnchorEl}
-            open={Boolean(mobileMenuAnchorEl)}
-            onClose={() => setMobileMenuAnchorEl(null)}
-          >
-            {renderNavLinks(true)}
-          </Menu>
-        </>
-      );
-    }
+    if (isMobile) return null;
     return linkComponents;
   };
 
@@ -116,25 +93,26 @@ const Navbar = ({ links }) => {
       }}
     >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: 'none', md: 'block' } }}>
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            PM-RAG
-          </Link>
+        <Typography variant="h6" component={Link} to={logoHref} sx={{ flexGrow: 1, display: { xs: 'block', md: 'block' }, textDecoration: 'none', color: 'text.primary', fontWeight: 800, letterSpacing: '-.04em' }}>
+          PM-RAG
         </Typography>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
           {renderNavLinks()}
         </Box>
-        <Box sx={{ flexGrow: 1, display: { xs: 'block', md: 'none' } }} />
         {isMobile && (
           <IconButton
-            edge="start"
+            edge="end"
             color="inherit"
             aria-label="menu"
             onClick={(e) => setMobileMenuAnchorEl(e.currentTarget)}
-            sx={{ mr: 1 }}
           >
             <MenuIcon />
           </IconButton>
+        )}
+        {isMobile && (
+          <Menu anchorEl={mobileMenuAnchorEl} open={Boolean(mobileMenuAnchorEl)} onClose={() => setMobileMenuAnchorEl(null)}>
+            {renderNavLinks(true)}
+          </Menu>
         )}
         <Box sx={{ flexGrow: 1 }} />
         <motion.div variants={buttonVariants} whileHover="hover">

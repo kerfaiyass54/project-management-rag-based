@@ -15,7 +15,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Slider,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -105,21 +104,21 @@ const DevPage = () => {
 
       <Grid container spacing={4}>
         {/* Form Controls */}
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom>Form Controls</Typography>
               <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+                <Grid xs={12} md={4}>
                   <TextField fullWidth label="Outlined" variant="outlined" />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid xs={12} md={4}>
                   <TextField fullWidth label="Filled" variant="filled" />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid xs={12} md={4}>
                   <TextField fullWidth label="Standard" variant="standard" />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid xs={12} md={6}>
                   <FormControl fullWidth>
                     <InputLabel>Select</InputLabel>
                     <Select label="Select">
@@ -128,7 +127,7 @@ const DevPage = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Grid xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <FormControlLabel control={<Switch defaultChecked />} label="Switch" />
                   <FormControlLabel control={<Checkbox defaultChecked />} label="Checkbox" />
                   <RadioGroup row>
@@ -142,20 +141,20 @@ const DevPage = () => {
         </Grid>
 
         {/* Data Display */}
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom>Data Display</Typography>
               <Grid container spacing={3} alignItems="center">
-                <Grid item><Avatar>H</Avatar></Grid>
-                <Grid item><Avatar sx={{ bgcolor: 'primary.main' }}>OP</Avatar></Grid>
-                <Grid item>
+                <Grid><Avatar>H</Avatar></Grid>
+                <Grid><Avatar sx={{ bgcolor: 'primary.main' }}>OP</Avatar></Grid>
+                <Grid>
                   <Badge badgeContent={4} color="primary">
                     <MailIcon color="action" />
                   </Badge>
                 </Grid>
-                <Grid item><Chip label="Chip" /></Grid>
-                <Grid item>
+                <Grid><Chip label="Chip" /></Grid>
+                <Grid>
                   <Tooltip title="This is a tooltip">
                     <Button>Tooltip</Button>
                   </Tooltip>
@@ -166,7 +165,7 @@ const DevPage = () => {
         </Grid>
 
         {/* Charts */}
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3, height: 400, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>Bar Chart</Typography>
@@ -181,7 +180,7 @@ const DevPage = () => {
             </MotionPaper>
           </AnimatedSection>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3, height: 400, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>Line Chart</Typography>
@@ -195,7 +194,7 @@ const DevPage = () => {
             </MotionPaper>
           </AnimatedSection>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid xs={12} md={4}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3, height: 400, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="h6" gutterBottom>Pie Chart</Typography>
@@ -213,7 +212,7 @@ const DevPage = () => {
         </Grid>
 
         {/* Feedback */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom>Feedback</Typography>
@@ -241,7 +240,7 @@ const DevPage = () => {
         </Grid>
 
         {/* Navigation & Surface */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <AnimatedSection>
             <MotionPaper whileHover={paperHover} sx={{ p: 3 }}>
               <Typography variant="h5" gutterBottom>Navigation & Surface</Typography>

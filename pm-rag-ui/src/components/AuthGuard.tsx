@@ -1,10 +1,8 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const AuthGuard = ({ children, roles }) => {
   const { keycloak, initialized } = useKeycloak();
-  const location = useLocation();
-
   if (!initialized) {
     return <div>Loading...</div>; // Or a loading spinner
   }

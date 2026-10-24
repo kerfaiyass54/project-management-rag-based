@@ -1,14 +1,15 @@
 import { useEffect, useRef } from 'react';
 
 const Iris = () => {
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
-    let mouse = { x: width / 2, y: height / 2 };
+    const mouse = { x: width / 2, y: height / 2 };
 
     const handleResize = () => {
       width = canvas.width = window.innerWidth;
@@ -23,8 +24,9 @@ const Iris = () => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
 
-    class Blob {
-      constructor(x, y, r, color) {
+    class VisualBlob {
+      x: number; y: number; r: number; color: string; vx: number; vy: number;
+      constructor(x: number, y: number, r: number, color: string) {
         this.x = x;
         this.y = y;
         this.r = r;
@@ -51,13 +53,13 @@ const Iris = () => {
       }
     }
 
-    const blobs = [];
+    const blobs: VisualBlob[] = [];
     const colors = ['#ffffff', '#f0f0f0', '#d9d9d9', '#c2c2c2', '#ababab'];
     for (let i = 0; i < 5; i++) {
-      blobs.push(new Blob(Math.random() * width, Math.random() * height, Math.random() * 100 + 50, colors[i % colors.length]));
+      blobs.push(new VisualBlob(Math.random() * width, Math.random() * height, Math.random() * 100 + 50, colors[i % colors.length]));
     }
 
-    let animate = () => {
+    const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
       const targetX = mouse.x;

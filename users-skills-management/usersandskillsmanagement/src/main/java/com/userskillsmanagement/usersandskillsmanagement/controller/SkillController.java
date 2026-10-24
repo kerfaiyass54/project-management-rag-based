@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/skills")
 @RequiredArgsConstructor
@@ -21,12 +23,27 @@ public class SkillController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<SkillDTO>> searchSkills(@RequestParam String skillName, Pageable pageable) {
-        return ResponseEntity.ok(skillService.searchSkills(skillName, pageable));
+    public ResponseEntity<Page<SkillDTO>> searchSkills(
+            @RequestParam(defaultValue = "", name = "search") String search,
+            @RequestParam(defaultValue = "", name = "skillName") String skillName,
+            Pageable pageable) {
+        String query = search.isBlank() ? skillName : search;
+        return ResponseEntity.ok(skillService.searchSkills(query, pageable));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SkillDTO> getSkillById(@PathVariable Long id) {
         return ResponseEntity.ok(skillService.getSkillById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
+        skillService.deleteSkill(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/usage")
+    public ResponseEntity<Map<String, SkillDTO>> getMostAndLeastUsedSkills() {
+        return ResponseEntity.ok(skillService.getMostAndLeastUsedSkills());
     }
 }
