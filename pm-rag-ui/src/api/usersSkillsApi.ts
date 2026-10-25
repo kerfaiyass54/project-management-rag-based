@@ -43,6 +43,18 @@ export interface SkillUsage {
   leastUsed?: Skill;
 }
 
+export interface Manager {
+  id: number;
+  managerName: string;
+  managerExperience: number;
+  managementArea: string;
+}
+
+export interface ManagerStats {
+  totalManagers: number;
+  mostExperienced: Manager | null;
+}
+
 const API_URL = import.meta.env.VITE_USERS_SKILLS_API_URL ?? 'http://localhost:8350/api/v1';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -89,4 +101,12 @@ export const usersSkillsApi = {
   getSkill: (id: number) => request<Skill>(`/skills/${id}`),
   deleteSkill: (id: number) => request<void>(`/skills/${id}`, { method: 'DELETE' }),
   getSkillUsage: () => request<SkillUsage>('/skills/usage'),
+  getManagers: (page: number, size: number, sortBy = 'managerName', sortDirection = 'asc') =>
+    request<PageResponse<Manager>>(`/managers?page=${page}&size=${size}&sort=${sortBy},${sortDirection}`),
+  createManager: (manager: Omit<Manager, 'id'>) =>
+    request<Manager>('/managers', { method: 'POST', body: JSON.stringify(manager) }),
+  updateManager: (id: number, manager: Omit<Manager, 'id'>) =>
+    request<Manager>(`/managers/${id}`, { method: 'PUT', body: JSON.stringify(manager) }),
+  deleteManager: (id: number) => request<void>(`/managers/${id}`, { method: 'DELETE' }),
+  getManagerStats: () => request<ManagerStats>('/managers/stats'),
 };

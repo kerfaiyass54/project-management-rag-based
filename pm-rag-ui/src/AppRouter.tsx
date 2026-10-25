@@ -23,6 +23,8 @@ import DeveloperModeIcon from '@mui/icons-material/DeveloperMode';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
 import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
+import SupervisorAccountRoundedIcon from '@mui/icons-material/SupervisorAccountRounded';
+import ManagersPage from './pages/admin/ManagersPage';
 
 const AppRouter: React.FC = () => {
   const { keycloak } = useKeycloak();
@@ -35,6 +37,7 @@ const AppRouter: React.FC = () => {
       { label: 'Dashboard', href: '/admin/dashboard', icon: DashboardRoundedIcon },
       { label: 'Engineers', href: '/admin/engineers', icon: GroupsRoundedIcon },
       { label: 'Skills', href: '/admin/skills', icon: BuildRoundedIcon },
+      { label: 'Managers', href: '/admin/managers', icon: SupervisorAccountRoundedIcon },
     ];
   } else {
     links = [
@@ -90,6 +93,7 @@ const AppRouter: React.FC = () => {
                 </AuthGuard>
               }
             />
+            <Route path="/admin/managers" element={<AuthGuard roles={['admin']}><ManagersPage /></AuthGuard>} />
 
             <Route
               path="/admin/skills/add"
