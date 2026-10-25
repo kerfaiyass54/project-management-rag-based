@@ -1,0 +1,147 @@
+# -----------------------------------------------------------------------------
+# Data Sources Configuration
+# -----------------------------------------------------------------------------
+data_sources:
+  # Primary database for user and skill data from the Spring Boot service
+  postgresql:
+    host: "localhost"
+    port: 5450
+    database: "users"
+    user: "users"
+    password: "users"
+    schema: "public" # Optional: specify if not using the default schema
+    tables:
+      - "engineers"
+      - "skill"
+      - "engineer_skill"
+      - "managers"
+
+# -----------------------------------------------------------------------------
+# Ingestion & Processing Pipeline
+# -----------------------------------------------------------------------------
+ingestion:
+  batch_size: 100
+  chunking:
+    strategy: "recursive_character" # Options: "semantic", "token", "fixed_size"
+    chunk_size: 1000
+    chunk_overlap: 200
+
+# -----------------------------------------------------------------------------
+# Embeddings Configuration
+# -----------------------------------------------------------------------------
+embeddings:
+  provider: "huggingface" # Options: "openai", "huggingface"
+  model_name: "all-MiniLM-L6-v2"
+  cache_dir: "./models_cache"
+
+# -----------------------------------------------------------------------------
+# Vector & Sparse Search Configuration
+# -----------------------------------------------------------------------------
+vector_db:
+  provider: "qdrant"
+  host: "localhost"
+  port: 6333
+  collection_name: "skills_analysis_v2"
+
+# -----------------------------------------------------------------------------
+# Retrieval Pipeline
+# -----------------------------------------------------------------------------
+retrieval:
+  strategy: "hybrid" # Options: "dense", "sparse", "hybrid"
+  top_k: 10
+  
+  # For hybrid retrieval, specify the sparse model
+  sparse_retrieval:
+    model_name: "naver/splade-v2-distil"
+
+  # Multi-step retrieval for complex queries
+  multi_step:
+    enabled: true
+    llm:
+      provider: "openai"
+      model_name: "gpt-3.5-turbo-instruct"
+
+  # Confidence scoring for retrieved documents
+  confidence_scoring:
+    enabled: true
+    threshold: 0.5
+
+# -----------------------------------------------------------------------------
+# Reranking Configuration
+# -----------------------------------------------------------------------------
+reranking:
+  enabled: true
+  provider: "cohere" # Options: "cohere", "cross-encoder"
+  model_name: "rerank-english-v2.0"
+  top_n: 3 # Number of documents to keep after reranking
+
+# -----------------------------------------------------------------------------
+# LLM & Generation Configuration
+# -----------------------------------------------------------------------------
+llm:
+  # Main model for generation and analysis
+  generation_model:
+    provider: "openai"
+    model_name: "gpt-4-turbo-preview"
+    temperature: 0.5
+    max_tokens: 2048
+
+  # Model for query rewriting
+  query_rewriting:
+    enabled: true
+    provider: "openai"
+    model_name: "gpt-3.5-turbo"
+    temperature: 0.0
+
+  # Model for self-checking the answer against the context
+  self_checking:
+    enabled: true
+    provider: "openai"
+    model_name: "gpt-4-turbo-preview"
+
+# -----------------------------------------------------------------------------
+# Conversation & Feedback
+# -----------------------------------------------------------------------------
+conversation_memory:
+  provider: "elasticsearch"
+  host: "localhost"
+  port: 9203 # Port for user conversation storage
+  index_name: "user_conversations"
+  max_history_length: 10
+
+feedback:
+  provider: "elasticsearch"
+  host: "localhost"
+  port: 9203
+  index_name: "user_feedback"
+
+# -----------------------------------------------------------------------------
+# Prompts
+# -----------------------------------------------------------------------------
+prompts:
+  template_dir: "./src/prompts/templates/"
+  analysis_prompt: "analysis_prompt.txt"
+  interpretation_prompt: "interpretation_prompt.txt"
+  query_rewrite_prompt: "query_rewrite_prompt.txt"
+  self_check_prompt: "self_check_prompt.txt"
+  multi_step_decomposition_prompt: "multi_step_decomposition_prompt.txt"
+
+# -----------------------------------------------------------------------------
+# Evaluation Framework
+# -----------------------------------------------------------------------------
+evaluation:
+  enabled: true
+  framework: "ragas" # Options: "ragas", "deepeval", "custom"
+  metrics:
+    - "faithfulness"
+    - "answer_relevancy"
+    - "context_recall"
+    - "context_precision"
+  dataset_path: "./evaluation/dataset.jsonl"
+
+# -----------------------------------------------------------------------------
+# API Server Configuration
+# -----------------------------------------------------------------------------
+api:
+  host: "0.0.0.0"
+  port: 7050

@@ -25,6 +25,10 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
 import SupervisorAccountRoundedIcon from '@mui/icons-material/SupervisorAccountRounded';
 import ManagersPage from './pages/admin/ManagersPage';
+import RagAnalyticsPage from './pages/admin/RagAnalyticsPage';
+import RagEvaluationPage from './pages/admin/RagEvaluationPage';
+import QueryStatsRoundedIcon from '@mui/icons-material/QueryStatsRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 
 const AppRouter: React.FC = () => {
   const { keycloak } = useKeycloak();
@@ -38,6 +42,8 @@ const AppRouter: React.FC = () => {
       { label: 'Engineers', href: '/admin/engineers', icon: GroupsRoundedIcon },
       { label: 'Skills', href: '/admin/skills', icon: BuildRoundedIcon },
       { label: 'Managers', href: '/admin/managers', icon: SupervisorAccountRoundedIcon },
+      { label: 'RAG Analytics', href: '/admin/rag-analytics', icon: QueryStatsRoundedIcon },
+      { label: 'RAG Evaluation', href: '/admin/rag-evaluation', icon: FactCheckRoundedIcon },
     ];
   } else {
     links = [
@@ -94,6 +100,8 @@ const AppRouter: React.FC = () => {
               }
             />
             <Route path="/admin/managers" element={<AuthGuard roles={['admin']}><ManagersPage /></AuthGuard>} />
+            <Route path="/admin/rag-analytics" element={<AuthGuard roles={['admin']}><RagAnalyticsPage /></AuthGuard>} />
+            <Route path="/admin/rag-evaluation" element={<AuthGuard roles={['admin']}><RagEvaluationPage /></AuthGuard>} />
 
             <Route
               path="/admin/skills/add"

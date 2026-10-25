@@ -55,6 +55,33 @@ export interface ManagerStats {
   mostExperienced: Manager | null;
 }
 
+export interface RagSource {
+  source_id: string;
+  content: string;
+  score: number;
+  retrieval_method: string;
+}
+
+export interface RagAnalysis {
+  answer: string;
+  rewritten_queries: string[];
+  sources: RagSource[];
+  confidence: number;
+  self_check_passed: boolean;
+  follow_up_queries: string[];
+  trace: Record<string, unknown>;
+  conversation_id: string;
+}
+
+export interface RagEvaluation {
+  faithfulness: number;
+  answer_relevancy: number;
+  context_precision: number;
+  context_recall: number;
+  overall: number;
+  details: Record<string, unknown>;
+}
+
 const API_URL = import.meta.env.VITE_USERS_SKILLS_API_URL ?? 'http://localhost:8350/api/v1';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
@@ -109,4 +136,28 @@ export const usersSkillsApi = {
     request<Manager>(`/managers/${id}`, { method: 'PUT', body: JSON.stringify(manager) }),
   deleteManager: (id: number) => request<void>(`/managers/${id}`, { method: 'DELETE' }),
   getManagerStats: () => request<ManagerStats>('/managers/stats'),
+  analyzeRag: (query: string, conversationId?: string, topK = 8) =>
+    request<RagAnalysis>('/admin/rag/analysis', {
+      method: 'POST',
+      body: JSON.stringify({ query, conversationId, topK }),
+    }),
+  submitRagFeedback: (feedback: {
+    conversationId?: string;
+    query: string;
+    answer: string;
+    rating: -1 | 0 | 1;
+    correction?: string;
+  }) => request<{ stored: boolean; feedback_id: string }>('/admin/rag/feedback', {
+    method: 'POST',
+    body: JSON.stringify(feedback),
+  }),
+  evaluateRag: (evaluation: {
+    query: string;
+    answer: string;
+    contexts: string[];
+    referenceAnswer?: string;
+  }) => request<RagEvaluation>('/admin/rag/evaluation', {
+    method: 'POST',
+    body: JSON.stringify(evaluation),
+  }),
 };
