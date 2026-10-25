@@ -28,11 +28,12 @@ interface ResourceTableProps<T extends { id: number }> {
   onSearchChange: (value: string) => void;
   onSortChange: (key: keyof T) => void;
   onDelete?: (row: T) => void;
+  onRowClick?: (row: T) => void;
 }
 
 export default function ResourceTable<T extends { id: number }>({
   rows, columns, total, page, rowsPerPage, search, sortBy, sortDirection, loading, error,
-  onPageChange, onRowsPerPageChange, onSearchChange, onSortChange, onDelete,
+  onPageChange, onRowsPerPageChange, onSearchChange, onSortChange, onDelete, onRowClick,
 }: ResourceTableProps<T>) {
   const [searchInput, setSearchInput] = useState(search);
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function ResourceTable<T extends { id: number }>({
           <TableBody>
             {loading ? <TableRow><TableCell colSpan={columns.length + (onDelete ? 1 : 0)} align="center" sx={{ py: 6 }}><CircularProgress size={28} /></TableCell></TableRow>
               : rows.length === 0 ? <TableRow><TableCell colSpan={columns.length + (onDelete ? 1 : 0)} align="center" sx={{ py: 6 }}><Typography color="text.secondary">No records found</Typography></TableCell></TableRow>
-              : rows.map((row, index) => <TableRow hover key={row.id} sx={{ animation: 'page-enter 420ms cubic-bezier(.2,.8,.2,1) both', animationDelay: `${index * 45}ms`, '&:hover td': { backgroundColor: 'rgba(99, 91, 255, .035)' } }}>{columns.map((column) => <TableCell key={String(column.key)}>{column.render ? column.render(row[column.key], row) : String(row[column.key] ?? '—')}</TableCell>)}{onDelete && <TableCell align="right"><Tooltip title="Delete"><IconButton color="error" onClick={() => onDelete(row)} sx={{ transition: 'transform 180ms ease, background-color 180ms ease', '&:hover': { transform: 'rotate(-8deg) scale(1.12)' } }}><DeleteOutlined /></IconButton></Tooltip></TableCell>}</TableRow>)}
+              : rows.map((row, index) => <TableRow hover key={row.id} onClick={() => onRowClick?.(row)} sx={{ cursor: onRowClick ? 'pointer' : 'default', animation: 'page-enter 420ms cubic-bezier(.2,.8,.2,1) both', animationDelay: `${index * 45}ms`, '&:hover td': { backgroundColor: 'rgba(99, 91, 255, .035)' } }}>{columns.map((column) => <TableCell key={String(column.key)}>{column.render ? column.render(row[column.key], row) : String(row[column.key] ?? '—')}</TableCell>)}{onDelete && <TableCell align="right"><Tooltip title="Delete"><IconButton color="error" onClick={(event) => { event.stopPropagation(); onDelete(row); }} sx={{ transition: 'transform 180ms ease, background-color 180ms ease', '&:hover': { transform: 'rotate(-8deg) scale(1.12)' } }}><DeleteOutlined /></IconButton></Tooltip></TableCell>}</TableRow>)}
           </TableBody>
         </Table>
       </TableContainer>

@@ -38,6 +38,11 @@ export interface EngineerSkill {
   proficiencyLevel: string;
 }
 
+export interface EngineerSkillDetails extends EngineerSkill {
+  skillName: string;
+  skillField: string;
+}
+
 export interface SkillUsage {
   mostUsed?: Skill;
   leastUsed?: Skill;
@@ -85,6 +90,7 @@ export const usersSkillsApi = {
   createEngineer: (engineer: Omit<Engineer, 'id'>) =>
     request<Engineer>('/engineers', { method: 'POST', body: JSON.stringify(engineer) }),
   getEngineer: (id: number) => request<Engineer>(`/engineers/${id}`),
+  getEngineerSkills: (id: number) => request<EngineerSkillDetails[]>(`/engineers/${id}/skills`),
   updateEngineer: (id: number, engineer: Omit<Engineer, 'id'>) =>
     request<Engineer>(`/engineers/${id}`, { method: 'PUT', body: JSON.stringify(engineer) }),
   deleteEngineer: (id: number) => request<void>(`/engineers/${id}`, { method: 'DELETE' }),

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Chip, Container } from '@mui/material';
 import PageHeader from '../../components/PageHeader';
 import ResourceTable from '../../components/ResourceTable';
@@ -7,6 +8,7 @@ import { usersSkillsApi } from '../../api/usersSkillsApi';
 import type { Engineer } from '../../api/usersSkillsApi';
 
 export default function EngineersPage() {
+  const navigate = useNavigate();
   const [rows, setRows] = useState<Engineer[]>([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
@@ -49,6 +51,7 @@ export default function EngineersPage() {
           { key: 'engineerPosition', label: 'Position', render: (value) => <Chip label={String(value)} variant="outlined" size="small" /> },
           { key: 'teamId', label: 'Team', render: (value) => value ? `Team ${value}` : 'Unassigned' },
         ]}
+        onRowClick={(row) => navigate(`/admin/engineers/${row.id}`)}
       />
     </Box>
   </Container>;

@@ -2,6 +2,7 @@ package com.userskillsmanagement.usersandskillsmanagement.controller;
 
 import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerDTO;
 import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerSkillDTO;
+import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerSkillDetailsDTO;
 import com.userskillsmanagement.usersandskillsmanagement.service.EngineerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,11 @@ public class EngineerController {
     @GetMapping("/{id}")
     public ResponseEntity<EngineerDTO> getEngineerById(@PathVariable Long id) {
         return ResponseEntity.ok(engineerService.getEngineerById(id));
+    }
+
+    @GetMapping("/{id}/skills")
+    public ResponseEntity<List<EngineerSkillDetailsDTO>> getEngineerSkills(@PathVariable Long id) {
+        return ResponseEntity.ok(engineerService.getEngineerSkills(id));
     }
 
     @PostMapping("/skills")

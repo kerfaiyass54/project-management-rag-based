@@ -25,6 +25,7 @@ import GroupsRoundedIcon from '@mui/icons-material/GroupsRounded';
 import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
 import SupervisorAccountRoundedIcon from '@mui/icons-material/SupervisorAccountRounded';
 import ManagersPage from './pages/admin/ManagersPage';
+import EngineerWorkspacePage from './pages/admin/EngineerWorkspacePage';
 
 const AppRouter: React.FC = () => {
   const { keycloak } = useKeycloak();
@@ -85,6 +86,7 @@ const AppRouter: React.FC = () => {
                 </AuthGuard>
               }
             />
+            <Route path="/admin/engineers/:id" element={<AuthGuard roles={['admin']}><EngineerWorkspacePage /></AuthGuard>} />
             <Route
               path="/admin/skills"
               element={

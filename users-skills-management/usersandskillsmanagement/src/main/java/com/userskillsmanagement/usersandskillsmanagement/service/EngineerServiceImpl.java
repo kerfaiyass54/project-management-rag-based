@@ -2,6 +2,7 @@ package com.userskillsmanagement.usersandskillsmanagement.service;
 
 import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerDTO;
 import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerSkillDTO;
+import com.userskillsmanagement.usersandskillsmanagement.model.dto.EngineerSkillDetailsDTO;
 import com.userskillsmanagement.usersandskillsmanagement.model.entity.Engineer;
 import com.userskillsmanagement.usersandskillsmanagement.model.entity.EngineerSkill;
 import com.userskillsmanagement.usersandskillsmanagement.model.entity.Skill;
@@ -64,6 +65,22 @@ public class EngineerServiceImpl implements EngineerService {
         engineerSkill.setProficiencyLevel(engineerSkillDTO.proficiencyLevel());
         EngineerSkill savedEngineerSkill = engineerSkillRepository.save(engineerSkill);
         return new EngineerSkillDTO(savedEngineerSkill.getId(), savedEngineerSkill.getEngineer().getId(), savedEngineerSkill.getSkill().getId(), savedEngineerSkill.getProficiencyLevel());
+    }
+
+    @Override
+    public List<EngineerSkillDetailsDTO> getEngineerSkills(Long engineerId) {
+        if (!engineerRepository.existsById(engineerId)) {
+            throw new RuntimeException("Engineer not found");
+        }
+        return engineerSkillRepository.findByEngineerId(engineerId).stream()
+                .map(engineerSkill -> new EngineerSkillDetailsDTO(
+                        engineerSkill.getId(),
+                        engineerSkill.getEngineer().getId(),
+                        engineerSkill.getSkill().getId(),
+                        engineerSkill.getSkill().getSkillName(),
+                        engineerSkill.getSkill().getSkillField(),
+                        engineerSkill.getProficiencyLevel()))
+                .toList();
     }
 
     @Override
