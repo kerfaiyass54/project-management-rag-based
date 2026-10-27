@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequestMapping("/api/teams")
@@ -25,7 +27,9 @@ public class TeamController {
     }
 
     @GetMapping
-    public List<TeamResponse> getAll() { return teamService.getAll(); }
+    public Page<TeamResponse> getAll(@RequestParam(defaultValue = "") String search, Pageable pageable) {
+        return teamService.getAll(search, pageable);
+    }
 
     @GetMapping("/{id}")
     public TeamResponse getById(@PathVariable String id) { return teamService.getById(id); }

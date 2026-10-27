@@ -26,11 +26,14 @@ import BuildRoundedIcon from '@mui/icons-material/BuildRounded';
 import SupervisorAccountRoundedIcon from '@mui/icons-material/SupervisorAccountRounded';
 import ManagersPage from './pages/admin/ManagersPage';
 import EngineerWorkspacePage from './pages/admin/EngineerWorkspacePage';
+import TeamsPage from './pages/manager/TeamsPage';
+import ProjectsPage from './pages/manager/ProjectsPage';
 
 const AppRouter: React.FC = () => {
   const { keycloak } = useKeycloak();
 
   const isAdmin = Boolean(keycloak?.hasRealmRole('admin'));
+  const isManager = Boolean(keycloak?.hasRealmRole('manager'));
   let links: NavLink[];
 
   if (isAdmin) {
@@ -39,6 +42,11 @@ const AppRouter: React.FC = () => {
       { label: 'Engineers', href: '/admin/engineers', icon: GroupsRoundedIcon },
       { label: 'Skills', href: '/admin/skills', icon: BuildRoundedIcon },
       { label: 'Managers', href: '/admin/managers', icon: SupervisorAccountRoundedIcon },
+    ];
+  } else if (isManager) {
+    links = [
+      { label: 'Teams', href: '/manager/teams', icon: GroupsRoundedIcon },
+      { label: 'Projects', href: '/manager/projects', icon: BuildRoundedIcon },
     ];
   } else {
     links = [
@@ -96,6 +104,8 @@ const AppRouter: React.FC = () => {
               }
             />
             <Route path="/admin/managers" element={<AuthGuard roles={['admin']}><ManagersPage /></AuthGuard>} />
+            <Route path="/manager/teams" element={<AuthGuard roles={['manager']}><TeamsPage /></AuthGuard>} />
+            <Route path="/manager/projects" element={<AuthGuard roles={['manager']}><ProjectsPage /></AuthGuard>} />
 
             <Route
               path="/admin/skills/add"

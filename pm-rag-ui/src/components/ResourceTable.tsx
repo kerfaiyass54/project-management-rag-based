@@ -12,7 +12,7 @@ export interface ResourceColumn<T> {
   render?: (value: T[keyof T], row: T) => ReactNode;
 }
 
-interface ResourceTableProps<T extends { id: number }> {
+interface ResourceTableProps<T extends { id: string | number }> {
   rows: T[];
   columns: ResourceColumn<T>[];
   total: number;
@@ -31,7 +31,7 @@ interface ResourceTableProps<T extends { id: number }> {
   onRowClick?: (row: T) => void;
 }
 
-export default function ResourceTable<T extends { id: number }>({
+export default function ResourceTable<T extends { id: string | number }>({
   rows, columns, total, page, rowsPerPage, search, sortBy, sortDirection, loading, error,
   onPageChange, onRowsPerPageChange, onSearchChange, onSortChange, onDelete, onRowClick,
 }: ResourceTableProps<T>) {

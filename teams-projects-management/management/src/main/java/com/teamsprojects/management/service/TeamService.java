@@ -10,6 +10,8 @@ import com.teamsprojects.management.repository.TeamRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.*;
@@ -61,10 +63,9 @@ public class TeamService {
     }
 
     @Cacheable(cacheNames = CacheNames.TEAM_LIST, key = "'all'")
-    public List<TeamResponse> getAll() {
-        return teamRepository.findAllByOrderByNameAsc().stream()
-                .map(team -> toResponse(team, null))
-                .toList();
+    public Page<TeamResponse> getAll(String search, Pageable pageable) {
+        return teamRepository.findByNameContainingIgnoreCase(search == null ? "" : search.trim(), pageable)
+                .map(team -> toResponse(team, null));
     }
 
     @CacheEvict(cacheNames = {CacheNames.TEAM_DETAIL, CacheNames.TEAM_LIST, CacheNames.AVAILABLE_ENGINEERS}, allEntries = true)

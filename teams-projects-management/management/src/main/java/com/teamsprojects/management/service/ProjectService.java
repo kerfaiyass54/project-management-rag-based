@@ -8,6 +8,8 @@ import com.teamsprojects.management.repository.ProjectRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
@@ -45,8 +47,15 @@ public class ProjectService {
     }
 
     @Cacheable(cacheNames = CacheNames.PROJECT_LIST, key = "'all'")
-    public List<ProjectResponse> getAll() {
-        return projectRepository.findAllByOrderByNameAsc().stream().map(this::toResponse).toList();
+    public Page<ProjectResponse> getAll(String search, String teamId, Pageable pageable) {
+        String normalized = search == null ? "" : search.trim();
+        if (teamId == null || teamId.isBlank()) {
+            return projectRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(normalized, normalized, pageable)
+                    .map(this::toResponse);
+        }
+        return projectRepository.findByTeamIdAndNameContainingIgnoreCaseOrTeamIdAndDescriptionContainingIgnoreCase(
+                        teamId, normalized, teamId, normalized, pageable)
+                .map(this::toResponse);
     }
 
     // Only description, duration, and repository can be changed by this operation.

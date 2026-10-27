@@ -38,6 +38,11 @@ public class ManagerController {
         return ResponseEntity.ok(managerService.getManagerStats());
     }
 
+    @GetMapping("/by-name/{name}")
+    public ResponseEntity<ManagerDTO> getManagerByName(@PathVariable String name) {
+        return ResponseEntity.ok(managerService.getManagerByName(name));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ManagerDTO> updateManager(@PathVariable Long id, @RequestBody ManagerDTO managerDTO) {
         return ResponseEntity.ok(managerService.updateManager(id, managerDTO));

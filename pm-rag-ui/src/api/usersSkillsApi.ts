@@ -115,4 +115,5 @@ export const usersSkillsApi = {
     request<Manager>(`/managers/${id}`, { method: 'PUT', body: JSON.stringify(manager) }),
   deleteManager: (id: number) => request<void>(`/managers/${id}`, { method: 'DELETE' }),
   getManagerStats: () => request<ManagerStats>('/managers/stats'),
+  getManagerByName: (name: string) => request<Manager>(`/managers/by-name/${encodeURIComponent(name)}`),
 };

@@ -60,4 +60,11 @@ public class ManagerServiceImpl implements ManagerService {
         Manager updatedManager = managerRepository.save(manager);
         return new ManagerDTO(updatedManager.getId(), updatedManager.getManagerName(), updatedManager.getManagerExperience(), updatedManager.getManagementArea());
     }
+
+    @Override
+    public ManagerDTO getManagerByName(String managerName) {
+        Manager manager = managerRepository.findByManagerNameIgnoreCase(managerName)
+                .orElseThrow(() -> new RuntimeException("Manager not found"));
+        return new ManagerDTO(manager.getId(), manager.getManagerName(), manager.getManagerExperience(), manager.getManagementArea());
+    }
 }

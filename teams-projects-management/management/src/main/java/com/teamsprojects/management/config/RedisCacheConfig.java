@@ -2,6 +2,7 @@ package com.teamsprojects.management.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -16,6 +17,13 @@ import java.util.Map;
 
 @Configuration
 public class RedisCacheConfig {
+
+    @Bean
+    ObjectMapper objectMapper() {
+        return JsonMapper.builder()
+                .findAndAddModules()
+                .build();
+    }
 
     @Bean
     RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {

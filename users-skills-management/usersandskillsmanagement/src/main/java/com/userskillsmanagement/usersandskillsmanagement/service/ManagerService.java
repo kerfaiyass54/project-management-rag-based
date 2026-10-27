@@ -12,4 +12,5 @@ public interface ManagerService {
     void deleteManager(Long id);
     Map<String, Object> getManagerStats();
     ManagerDTO updateManager(Long id, ManagerDTO managerDTO);
+    ManagerDTO getManagerByName(String managerName);
 }

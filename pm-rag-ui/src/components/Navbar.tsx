@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, Box, useTheme, useMediaQuery } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useKeycloak } from '@react-keycloak/web';
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -23,6 +24,7 @@ const Navbar = ({ links, logoHref }: NavbarProps) => {
   const [userAnchorEl, setUserAnchorEl] = useState(null);
   const [mobileMenuAnchorEl, setMobileMenuAnchorEl] = useState(null);
   const location = useLocation();
+  const { keycloak } = useKeycloak();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -138,8 +140,8 @@ const Navbar = ({ links, logoHref }: NavbarProps) => {
           open={Boolean(userAnchorEl)}
           onClose={() => setUserAnchorEl(null)}
         >
-          <MenuItem>Profile</MenuItem>
-          <MenuItem>Sign Out</MenuItem>
+          <MenuItem disabled>{keycloak.tokenParsed?.name ?? keycloak.tokenParsed?.preferred_username ?? 'Signed-in user'}</MenuItem>
+          <MenuItem onClick={() => void keycloak.logout({ redirectUri: window.location.origin })}>Sign Out</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>
